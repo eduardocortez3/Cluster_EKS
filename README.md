@@ -109,11 +109,11 @@ Acesse o diretório eks e lá dentro digite:
 
 depois que concluir o deploy execute os seguintes comandos:
 
-`kubectl apply -f eks/manifests/components.yaml`
+`kubectl apply -f k8s/manifests/components.yaml`
 
-`kubectl apply -f eks/manifests/calico-operator.yaml`
+`kubectl apply -f k8s/manifests/calico-operator.yaml`
 
-`kubectl apply -f eks/manifests/calico-crs.yaml`
+`kubectl apply -f k8s/manifests/calico-crs.yaml`
 
 Pronto ! 
 
