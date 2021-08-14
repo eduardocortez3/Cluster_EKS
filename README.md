@@ -12,10 +12,6 @@
 
 `Helm:`  [Using Helm with Amazon EKS - Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/helm.html)
 
-
-
-
-
 ---
 
 ### Deploy:
@@ -67,11 +63,7 @@ variable "nodegroup" {
         "disk"    = "20"
   }
 }
-
-
 ```
-
-
 
 ### Criando a VPC
 
@@ -79,15 +71,11 @@ Primeiro temos que criar a VPC e a AWS nos fornece no procedimento uma template 
 
 doc ref: [Creating a VPC for your Amazon EKS cluster - Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/create-public-private-vpc.html)
 
-
-
 Detalhes do que é feito:
 
-![](/home/stark/.var/app/com.github.marktext.marktext/config/marktext/images/2021-08-13-15-24-45-image.png)
+![](https://github.com/g014x/Cluster_EKS/blob/main/images/vpc.png)
 
 O terraform precisa das subnet_ids para realizar o deploy do restante do ambiente, a forma mais simples que encontrei para fazer isso foi com o `for_each` , então precisamos primeiro executar a criação da VPC separado: 
-
-
 
 - dentro do diretório projeto_eks  Execute:
 
@@ -95,45 +83,29 @@ O terraform precisa das subnet_ids para realizar o deploy do restante do ambient
 
         `terraform apply -target=aws_cloudformation_stack.vpc`
 
-
-
 - Após o deploy da VPC,  realizaremos o deploy de todo o resto do ambiente:
 
        `terraform apply`
 
-
-
 > Caso não queira perder as configurações atuais do /home/$USER/.kube/config salve antes de executar o comando abaixo.
-
-
 
 No final da execução será exibido algumas informações como: Nome do cluster criado, subnets, e o kubeconfig-certificate que você pode inserir no arquivo `/home/$USER/.kube/config`  ou pode somente executar o comando abaixo:
 
-
-
      `aws eks update-kubeconfig --name  NOME DO CLUSTER AQUI`
-
-
 
 O cluster está pronto com os add-ons: `kube-proxy` e  `vpc-cni` 
 
 Configuração de logging API Server, Audit, Controller manager e Scheduler  direcionada para o Cloud Watch.
 
-
-
 ### Monitoração
 
 Na etapa anterior foi criado o serviço do EKS e os nodes. Agora vamos juntar tudo e criar o painel de monitoração:
-
-
 
 Acesse o diretório eks e lá dentro digite:
 
 `terraform init`
 
 `terraform apply`
-
-
 
 depois que concluir o deploy execute os seguintes comandos:
 
@@ -143,11 +115,7 @@ depois que concluir o deploy execute os seguintes comandos:
 
 `kubectl apply -f eks/manifests/calico-crs.yaml`
 
-
-
 Pronto ! 
-
-
 
 O que foi feito deploy no cluster:
 
@@ -158,10 +126,6 @@ O que foi feito deploy no cluster:
 - Calico - https://docs.aws.amazon.com/pt_br/eks/latest/userguide/calico.html
 
 - Metrics  - https://docs.aws.amazon.com/pt_br/eks/latest/userguide/metrics-server.html
-  
-  
-
-
 
 O painel do grafana pode ser acessado :
 
@@ -169,11 +133,7 @@ O painel do grafana pode ser acessado :
 
          senha:  prom-operator
 
-
-
 Temos lá dentro um painel do granafa como mostro abaixo algumas telas de monitoração de vários recursos:
-
-
 
 ![](/media/stark/DATA/aws/Projetos/projeto_desafio/images/monitor_network_grafana_01.png)
 
@@ -182,8 +142,6 @@ Temos lá dentro um painel do granafa como mostro abaixo algumas telas de monito
 ![](/media/stark/DATA/aws/Projetos/projeto_desafio/images/monitor_network_grafana_03.png)
 
 ![](/media/stark/DATA/aws/Projetos/projeto_desafio/images/monitor_network_grafana_04..png)
-
-
 
 Lista da maioria dos dashboards prontos com dados do Prometheus
 
@@ -229,7 +187,7 @@ resource "aws_eks_cluster" "eks" {
   enabled_cluster_log_types = ["api", "audit", "controllerManager", "scheduler"]
   role_arn = aws_iam_role.eks_role.arn
   version = "1.21"
- 
+
   vpc_config {
     subnet_ids = data.aws_subnet_ids.subnets_ids.ids
   }
@@ -264,13 +222,8 @@ resource "aws_cloudwatch_log_group" "role_logging_eks" {
 - Nessa segunda etapa crio o cluster EKS e adiciono alguns addons e habilito o log, tudo isso para para gerar algumas métricas.  Por conta de organização eu separei as roles e políticas no arquivo `iam.tf`
   
   *Obs.: O coredns algumas vezes apresenta problemas para habilitar no EKS via terraform, por conta disso achei melhor não habilitar. Pode ser habilitado manualmente.*
-  
-  
-
-
 
 ```yaml
-
 ################ DEPLOY NODES DO EKS ################
 resource "aws_eks_node_group" "nodegroup_eks" {
   cluster_name    = var.eks.name
@@ -296,21 +249,16 @@ remote_access {
     aws_iam_role_policy_attachment.eks_role_nodes-AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.eks_role_nodes-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.eks_role_nodes-AmazonEC2ContainerRegistryReadOnly,
-    
+
   ]
 }
 ```
 
 - Na terceira etapa do `main.tf` crio o nodegroup com as configurações determinadas no aquivo `'var.tf` .  Por conta de organização eu separei as roles e políticas no arquivo `iam.tf`
-  
-  
 
 Achei melhor separar o deploy em 2 partes então a segunda parte é configuração baseada em kubectl e helm.
 
-
-
 ```yaml
-
 resource "kubernetes_config_map" "aws-auth-cm" {
   metadata {
     name = "aws-auth"
@@ -320,7 +268,6 @@ resource "kubernetes_config_map" "aws-auth-cm" {
     "my_config_file.yml" = "${file("${path.module}/manifests/aws-auth-cm.yaml")}"
   }
 }
-
 ```
 
 - Faço aqui o deploy do configmap com o arn do nodegroup criado na etapa anterior.
