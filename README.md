@@ -135,17 +135,17 @@ O painel do grafana pode ser acessado :
 
 Temos lá dentro um painel do granafa como mostro abaixo algumas telas de monitoração de vários recursos:
 
-![](/media/stark/DATA/aws/Projetos/projeto_desafio/images/monitor_network_grafana_01.png)
+![](https://github.com/g014x/Cluster_EKS/blob/main/images/monitor_network_grafana_01.png)
 
-![](/media/stark/DATA/aws/Projetos/projeto_desafio/images/monitor_network_grafana_02.png)
+![](https://github.com/g014x/Cluster_EKS/blob/main/images/monitor_network_grafana_02.png)
 
-![](/media/stark/DATA/aws/Projetos/projeto_desafio/images/monitor_network_grafana_03.png)
+![](https://github.com/g014x/Cluster_EKS/blob/main/images/monitor_network_grafana_03.png)
 
-![](/media/stark/DATA/aws/Projetos/projeto_desafio/images/monitor_network_grafana_04..png)
+![](https://github.com/g014x/Cluster_EKS/blob/main/images/monitor_network_grafana_04..png)
 
 Lista da maioria dos dashboards prontos com dados do Prometheus
 
-![](/media/stark/DATA/aws/Projetos/projeto_desafio/images/dashboards.png)
+![](https://github.com/g014x/Cluster_EKS/blob/main/images/dashboards.png)
 
 ---
 
