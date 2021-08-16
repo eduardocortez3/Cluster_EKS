@@ -153,11 +153,13 @@ O que foi feito deploy no cluster:
 
 
 
-- Nesse painel é feito o monitoramento de rede cada Pod.
+Nesse painel é feito o monitoramento de rede cada Pod.
 
 ![](https://github.com/g014x/Cluster_EKS/blob/main/images/monitor_network_grafana_01.png)
 
 ![](https://github.com/g014x/Cluster_EKS/blob/main/images/monitor_network_grafana_02.png)
+
+
 
 
 
