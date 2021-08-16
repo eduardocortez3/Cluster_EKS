@@ -143,17 +143,17 @@ O que foi feito deploy no cluster:
   
   
 
+Temos no cluster um painel do granafa como mostro abaixo algumas telas de monitoração de vários recursos.
+
 - O painel do grafana pode ser acessado :
 
-                usuário:  admin
+            usuário: admin
 
-                senha:  prom-operator
-
-- Temos lá dentro um painel do granafa como mostro abaixo algumas telas de monitoração de vários recursos:
+            senha: prom-operator
 
 
 
-Nesse painel é feito o monitoramento de rede cada Pod.
+**Nesse painel é feito o monitoramento de rede cada Pod.**
 
 ![](https://github.com/g014x/Cluster_EKS/blob/main/images/monitor_network_grafana_01.png)
 
@@ -163,17 +163,25 @@ Nesse painel é feito o monitoramento de rede cada Pod.
 
 
 
-Esse dashboard utiliza métricas para monitorar a rede de cada kubelet que está nas intâncias/ nodes do cluster.
+
+
+**Esse dashboard utiliza métricas para monitorar a rede de cada kubelet que está nas intâncias/ nodes do cluster.**
 
 ![](https://github.com/g014x/Cluster_EKS/blob/main/images/monitor_network_grafana_03.png)
 
 ![](https://github.com/g014x/Cluster_EKS/blob/main/images/monitor_network_grafana_04..png)
 
-Lista da maioria dos dashboards prontos com métricas do Prometheus
+
+
+
+
+**Lista da maioria dos dashboards prontos com métricas do Prometheus**
 
 ![](https://github.com/g014x/Cluster_EKS/blob/main/images/dashboards.png)
 
 ---
+
+
 
 ### Explicando principais pontos do código:
 
