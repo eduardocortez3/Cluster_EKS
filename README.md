@@ -77,43 +77,57 @@ Detalhes do que é feito:
 
 O terraform precisa das subnet_ids para realizar o deploy do restante do ambiente, a forma mais simples que encontrei para fazer isso foi com o `for_each` , então precisamos primeiro executar a criação da VPC separado: 
 
-- dentro do diretório projeto_eks  Execute:
+- dentro do diretório  **Cluster_EKS**   Execute:
 
         `terraform init`
 
         `terraform apply -target=aws_cloudformation_stack.vpc`
 
+
+
 - Após o deploy da VPC,  realizaremos o deploy de todo o resto do ambiente:
 
        `terraform apply`
+
+
 
 > Caso não queira perder as configurações atuais do /home/$USER/.kube/config salve antes de executar o comando abaixo.
 
 No final da execução será exibido algumas informações como: Nome do cluster criado, subnets, e o kubeconfig-certificate que você pode inserir no arquivo `/home/$USER/.kube/config`  ou pode somente executar o comando abaixo:
 
+
+
      `aws eks update-kubeconfig --name  NOME DO CLUSTER AQUI`
 
-O cluster está pronto com os add-ons: `kube-proxy` e  `vpc-cni` 
 
-Configuração de logging API Server, Audit, Controller manager e Scheduler  direcionada para o Cloud Watch.
+
+- O cluster está pronto com os add-ons: `kube-proxy` e  `vpc-cni` . O **CoreDNS** está apresentando problemas para responder o status ao terraform e algumas vezes apresenta um erro , então retirei do código e até isso ser normalizado melhor adicionar manualmente, caso queira.
+
+- Configuração de logging API Server, Audit, Controller manager e Scheduler  direcionada para o Cloud Watch.
+
+
 
 ### Monitoração
 
-Na etapa anterior foi criado o serviço do EKS e os nodes. Agora vamos juntar tudo e criar o painel de monitoração:
+Na etapa anterior foram criados o serviço do EKS e os nodes. Agora vamos juntar tudo e criar o painel de monitoração:
 
-Acesse o diretório eks e lá dentro digite:
+Acesse o diretório **k8s** e lá dentro digite:
 
 `terraform init`
 
 `terraform apply`
 
+
+
 depois que concluir o deploy execute os seguintes comandos:
 
-`kubectl apply -f k8s/manifests/components.yaml`
+`kubectl apply -f manifests/components.yaml`
 
-`kubectl apply -f k8s/manifests/calico-operator.yaml`
+`kubectl apply -f manifests/calico-operator.yaml`
 
-`kubectl apply -f k8s/manifests/calico-crs.yaml`
+`kubectl apply -f manifests/calico-crs.yaml`
+
+
 
 Pronto ! 
 
@@ -126,24 +140,34 @@ O que foi feito deploy no cluster:
 - Calico - https://docs.aws.amazon.com/pt_br/eks/latest/userguide/calico.html
 
 - Metrics  - https://docs.aws.amazon.com/pt_br/eks/latest/userguide/metrics-server.html
+  
+  
 
-O painel do grafana pode ser acessado :
+- O painel do grafana pode ser acessado :
 
-         usuário:  admin
+                usuário:  admin
 
-         senha:  prom-operator
+                senha:  prom-operator
 
-Temos lá dentro um painel do granafa como mostro abaixo algumas telas de monitoração de vários recursos:
+- Temos lá dentro um painel do granafa como mostro abaixo algumas telas de monitoração de vários recursos:
+
+
+
+- Nesse painel é feito o monitoramento de rede cada Pod.
 
 ![](https://github.com/g014x/Cluster_EKS/blob/main/images/monitor_network_grafana_01.png)
 
 ![](https://github.com/g014x/Cluster_EKS/blob/main/images/monitor_network_grafana_02.png)
 
+
+
+Esse dashboard utiliza métricas para monitorar a rede de cada kubelet que está nas intâncias/ nodes do cluster.
+
 ![](https://github.com/g014x/Cluster_EKS/blob/main/images/monitor_network_grafana_03.png)
 
 ![](https://github.com/g014x/Cluster_EKS/blob/main/images/monitor_network_grafana_04..png)
 
-Lista da maioria dos dashboards prontos com dados do Prometheus
+Lista da maioria dos dashboards prontos com métricas do Prometheus
 
 ![](https://github.com/g014x/Cluster_EKS/blob/main/images/dashboards.png)
 
